@@ -1,0 +1,34 @@
+﻿apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: packaginganddlvryservice-deployment
+  labels:
+    app: PackagingAndDlvryService
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: PackagingAndDlvryService
+  template: 
+    metadata: 
+      labels:
+        app: PackagingAndDlvryService
+    spec:
+      containers:
+      - name: packaginganddlvryservice
+        image: returnorderacr.azurecr.io/packaginganddlvrysvcimage:latest
+        ports:
+        - containerPort: 8080
+      imagePullSecrets:
+      - name: returnordersecret
+---
+apiVersion: v1
+kind: Service
+metadata: 
+  name: packaginganddlvrysvc
+spec:
+  type: LoadBalancer
+  ports:
+  - port: 80
+  selector:
+    api: PackagingAndDlvryService    
